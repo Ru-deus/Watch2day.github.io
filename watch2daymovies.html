@@ -1,0 +1,102 @@
+Absolutely, let’s create a full HTML file with the functional skipping and seek bar without any CSS or JavaScript files separated.
+
+### Complete HTML Code:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Video Player</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        #videoPlayer {
+            width: 100%;
+            max-width: 720px;
+            margin: 20px auto;
+            display: block;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 720px;
+            margin: auto;
+            border: 2px solid #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .seek-bar-container {
+            position: relative;
+            width: 100%;
+            background-color: #333;
+            height: 10px;
+            cursor: pointer;
+        }
+        .seek-bar {
+            position: absolute;
+            height: 100%;
+            background-color: #fff;
+            width: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="video-container">
+    <video id="videoPlayer" controls>
+        <source src="123.mp4" type="video/mp4">
+        <track kind="captions" src="captions.vtt" srclang="en" label="English">
+        Your browser does not support the video tag.
+    </video>
+    <div class="seek-bar-container" onclick="seekVideo(event)">
+        <div class="seek-bar" id="seekBar"></div>
+    </div>
+</div>
+
+<script>
+    const videoPlayer = document.getElementById('videoPlayer');
+    const seekBar = document.getElementById('seekBar');
+
+    videoPlayer.addEventListener('timeupdate', updateSeekBar);
+    videoPlayer.addEventListener('dblclick', handleDblClick);
+
+    function skip(seconds) {
+        let newTime = videoPlayer.currentTime + seconds;
+        if (newTime < 0) {
+            newTime = 0;
+        } else if (newTime > videoPlayer.duration) {
+            newTime = videoPlayer.duration;
+        }
+        videoPlayer.currentTime = newTime;
+    }
+
+    function handleDblClick(event) {
+        const rect = videoPlayer.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const skipTime = x < rect.width / 2 ? -10 : 10;
+        skip(skipTime);
+    }
+
+    function seekVideo(event) {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const percentage = clickX / rect.width;
+        const newTime = percentage * videoPlayer.duration;
+        videoPlayer.currentTime = newTime;
+    }
+
+    function updateSeekBar() {
+        const percentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+        seekBar.style.width = percentage + '%';
+    }
+</script>
+
+</body>
+</html>
+```
+
